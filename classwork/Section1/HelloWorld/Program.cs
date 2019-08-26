@@ -10,7 +10,18 @@ namespace HelloWorld
     class Program
     {
         static void Main ( /*string[] args*/ )
-        {            
+        {  
+            string name = "";
+            //name = "Bob";
+            string name2;
+
+            name2 = Console.ReadLine ();
+            //string name2;
+            //string if = "";
+
+            Console.WriteLine (name2);
+            name2 = name = "Sue";
+
             Console.WriteLine ("Hello World!");
             
         }
