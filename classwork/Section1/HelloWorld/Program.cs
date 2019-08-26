@@ -23,7 +23,13 @@ namespace HelloWorld
             name2 = name = "Sue";
 
             Console.WriteLine ("Hello World!");
-            
+
+            int hours = 8;
+            double payrate = 15.25;
+
+            double totalpay = payrate * hours;
+            string fullname = "fred " + "" + "jones";
+
         }
     }
 }
