@@ -1,7 +1,7 @@
 ﻿/*
  * ITSE 1430
  * Lab 1
- * Me 
+ * geofffrey
  */
 using System;
 
@@ -13,9 +13,6 @@ namespace HelloWorld
         {            
             Console.WriteLine ("Hello World!");
             
-            //Another block
-
-            //Yet another block
         }
     }
 }
