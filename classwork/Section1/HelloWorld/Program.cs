@@ -45,8 +45,24 @@ namespace HelloWorld
             int runLength = ReadInt32 ("Run Length (in minutes): ");
 
             //Get have seen
-            Console.Write ("Have Seen? ");
-            string haveSeen = Console.ReadLine ();
+            bool haveSeen = ReadBoolean ("Have Seen? ");
+        }
+
+        static bool ReadBoolean ( string message )
+        {
+            while (true)
+            {
+                Console.Write (message);
+
+                string input = Console.ReadLine ();
+
+                //int result = Int32.Parse (input);
+                bool result;
+                if (Boolean.TryParse (input, out result))
+                    return result;
+
+                Console.WriteLine ("Not a boolean");
+            };
         }
 
         static int ReadInt32 ( string message )
@@ -61,10 +77,9 @@ namespace HelloWorld
                 //int result;
                 //if (Int32.TryParse (input, out result))
                 if (Int32.TryParse (input, out int result))
-
-
                     return result;
-                Console.WriteLine ("not a number");
+
+                Console.WriteLine ("Not a number");
             };
         }
 
@@ -114,7 +129,8 @@ namespace HelloWorld
 
             string fullName = "Fred" + " " + "Jones";
 
+        }
 
-        }  
+
     }
 }
