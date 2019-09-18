@@ -24,9 +24,13 @@ namespace itse1430.MoiviesLib.Host
         private void AddToolStripMenuItem_Click ( object sender, EventArgs e )
         {
             var form = new MovieForm ();
-            form.ShowDialog ();
+            //form.ShowDialog ();
+
+            if (form.ShowDialog () == DialogResult.OK)
+                _movie = form.Movie;
 
 
         }
+        private Movie _movie;
     }
 }
