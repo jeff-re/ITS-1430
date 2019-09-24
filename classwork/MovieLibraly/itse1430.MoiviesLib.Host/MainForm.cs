@@ -11,8 +11,8 @@ namespace itse1430.MoiviesLib.Host
             /// <summary>Represent movie data.</summary>
             InitializeComponent ();
             Movie movie = new Movie ();
-            movie.title = "jaws";
-            movie.description = movie.title;
+            movie.Title = "jaws";
+            movie.Description = movie.Title;
             
         }
 
@@ -21,7 +21,7 @@ namespace itse1430.MoiviesLib.Host
 
         }
 
-        private void AddToolStripMenuItem_Click ( object sender, EventArgs e )
+        private void OnMovieAdd ( object sender, EventArgs e )
         {
             var form = new MovieForm ();
             //form.ShowDialog ();
@@ -32,5 +32,20 @@ namespace itse1430.MoiviesLib.Host
 
         }
         private Movie _movie;
+
+        private void OnMovieEdit ( object sender, EventArgs e )
+        {
+
+        }
+
+        private void OnMovieDelete ( object sender, EventArgs e )
+        {
+
+        }
+
+        private void OnMovieAbout ( object sender, EventArgs e )
+        {
+
+        }
     }
 }

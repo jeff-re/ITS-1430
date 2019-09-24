@@ -26,12 +26,12 @@ namespace itse1430.MoiviesLib.Host
         private void BtnSave_Click ( object sender, EventArgs e )
         {
             var movie = new Movie ();
-            movie.title = _txtName.Text;
-            movie.description = txtDescription.Text;
-            movie.releaseYear = GetAsInt32 (_txtReleaseYear);
-            movie.runLength = GetAsInt32 (_txtRunLength);
-            movie.rating = cbRating.Text;
-            movie.hasSeen = chkHasSeen.Checked;
+            movie.Title = _txtName.Text;
+            movie.Description = txtDescription.Text;
+            movie.ReleaseYear = GetAsInt32 (_txtReleaseYear);
+            movie.RunLength = GetAsInt32 (_txtRunLength);
+            movie.Rating = cbRating.Text;
+            movie.HasSeen = chkHasSeen.Checked;
 
             // validate
             var message = movie.Validate ();
