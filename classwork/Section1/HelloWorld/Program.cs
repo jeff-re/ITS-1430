@@ -23,20 +23,19 @@ namespace HelloWorld
                 char input = DisplayMenu ();
                 switch (input)
                 {
-                    // Fallthrough alloed only if case is empty
+                    //Fallthrough allowed only if case is empty
                     case 'a':
-                    case 'A':AddMovie (); break;
+                    case 'A': AddMovie(); break;
 
-                    // Must have break/return at end od case
-                    case 'D':DisplayMovie ();break;
-                    case 'R':RemoveMovie ();break;
+                    //Must have break/return at end of each case
+                    case 'D': DisplayMovie(); break;
+                    case 'R': RemoveMovie(); break;
                     case 'Q':
                     {
                         quit = true;
                         break;
                     }
-                    default: Console.WriteLine ("Not supported");break;
-
+                    default: Console.WriteLine("Not supported"); break;
                 };
                 //if (input == 'A')
                 //    AddMovie();
@@ -210,7 +209,9 @@ namespace HelloWorld
 
         static void DemoArithmetic ()
         {
+            Int32 hours2;
             int hours = 8;
+            hours2 = hours;
             double payRate = 15.25;
 
             double totalPay = hours * payRate;
@@ -299,6 +300,8 @@ namespace HelloWorld
 
         static void DemoString()
         {
+            //String str2;
+            //string str2;
             string str = null;
 
             //Checking for null
@@ -318,6 +321,7 @@ namespace HelloWorld
                 str = str.ToLower();
 
             //Correct approach
+            //if (!string.IsNullOrEmpty(str))
             if (!String.IsNullOrEmpty(str))
                 str = str.ToLower();
         }

@@ -1,85 +1,92 @@
 ﻿using System;
 using System.Windows.Forms;
 
-
-namespace itse1430.MoiviesLib.Host
+namespace Itse1430.MovieLib.Host
 {
     public partial class MainForm : Form
     {
         public MainForm ()
         {
-            /// <summary>Represent movie data.</summary>
-            InitializeComponent ();
-            Movie movie = new Movie ();
-            movie.Title = "jaws";
+            InitializeComponent();
+            
+            //Itse1430.MovieLib.Movie
+            Movie movie = new Movie();
+            movie.Title = "Jaws";
             movie.Description = movie.Title;
-
         }
 
-        private void MoviesToolStripMenuItem_Click ( object sender, EventArgs e )
-        {
-
-        }
-
+        //Called when Movie\Add selected
         private void OnMovieAdd ( object sender, EventArgs e )
         {
-            var form = new MovieForm ();
-            //form.ShowDialog ();
+            var form = new MovieForm();
 
-            if (form.ShowDialog () == DialogResult.OK)
-                _movie = form.Movie;
+            //Modeless - does not block main window
+            //form.Show();
 
-            if (form.ShowDialog (this) == DialogResult.OK)
+            //Show the new movie form modally
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
                 AddMovie(form.Movie);
-
-        }
-        private Movie _movie;
+                UpdateUI();
+            };
+        }        
 
         private Movie GetSelectedMovie ()
         {
-            return _movie;
+            return _movies[0];
         }
 
         private void OnMovieEdit ( object sender, EventArgs e )
         {
             //Get selected movie
-            var movie = GetSelectedMovie ();
+            var movie = GetSelectedMovie();
             if (movie == null)
                 return;
 
-            var form = new MovieForm ();
-
-            if (form.ShowDialog (this) == DialogResult.OK)
+            var form = new MovieForm();
+            form.Movie = movie;
+            
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
                 //TODO: Change to update
-                RemoveMovie (movie);
-                AddMovie (form.Movie);
+                RemoveMovie(movie);
+                AddMovie(form.Movie);
+                UpdateUI();
             };
-
         }
 
         private void OnMovieDelete ( object sender, EventArgs e )
         {
-            var movie = GetSelectedMovie ();
+            var movie = GetSelectedMovie();
             if (movie == null)
                 return;
 
             //Confirmation
             var msg = $"Are you sure you want to delete {movie.Title}?";
-            var result = MessageBox.Show (msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
                 return;
 
-            //TODO: dELETE IT
-            _movie = null;
-
+            //Delete it
+            RemoveMovie(movie);
+            UpdateUI();
         }
 
-        private void OnMovieAbout ( object sender, EventArgs e )
+        private void OnFileExit ( object sender, EventArgs e )
         {
-            var form = new AboutForm ();
-            form.ShowDialog (this);
+            Close();
+        }
 
+        private void OnHelpAbout ( object sender, EventArgs e )
+        {
+            var form = new AboutForm();
+            form.ShowDialog(this);            
+        }
+
+        private void UpdateUI ()
+        {
+            var movies = GetMovies();
+            _lstMovies.Items.AddRange(movies);
         }
 
         private void AddMovie ( Movie movie )
@@ -107,21 +114,14 @@ namespace itse1430.MoiviesLib.Host
                     return;
                 };
             };
-
-
         }
 
         private Movie[] GetMovies ()
         {
+            //TODO: Filter out empty movies
             return _movies;
         }
 
         private Movie[] _movies = new Movie[100];
-    
-
-    private void ExitToolStripMenuItem_Click ( object sender, EventArgs e )
-        {
-
-        }
     }
 }

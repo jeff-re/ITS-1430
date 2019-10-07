@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("itse1430.MoiviesLib")]
+[assembly: AssemblyTitle("Movie Library")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("itse1430.MoiviesLib")]
+[assembly: AssemblyCompany("Me")]
+[assembly: AssemblyProduct("Movie Library")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("25afa7c9-b506-4ab7-89b6-052a48d7674b")]
+[assembly: Guid("8a189255-edac-4c14-95fc-3ba0c385039f")]
 
 // Version information for an assembly consists of the following four values:
 //
