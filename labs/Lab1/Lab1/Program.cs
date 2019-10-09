@@ -7,7 +7,7 @@ namespace Lab1
         static void Main(/*string[] args*/)
         {
 
-           HandleCommand ();
+            room1 ();
             
             //while(command != "quit")
             //{
@@ -22,62 +22,7 @@ namespace Lab1
 
         }
 
-        //static string Room1 ()
-        //{
-        //    var quit = false;
-        //    while(!quit)
-        //    {
-        //        Console.WriteLine ("you are in room 1\n");
-        //        string move = Menu ();
-        //        string option;
-
-        //        switch (move)
-        //        {
-        //            case "move left": Console.WriteLine ("\t hit a wall\n");break;
-        //             case "move right": Room2();break;
-        //             case "quit":
-        //            Console.WriteLine ("are you sure you want to quit?");
-        //            Console.WriteLine ("type yes or \"no\"");
-        //            option = Console.ReadLine ();
-        //            if (option == "yes")
-        //                quit = true;
-        //            break;
-
-        //        }
-        //    } 
-        //    return "test";
-        //}
-
-        //static void Room2 ()
-        //{
-        //    var quit = false;
-        //    while (!quit)
-        //    {
-        //        Console.WriteLine ("you are in room 2");
-        //        string move = Menu ();
-        //        string option;
-
-        //        switch (move)
-        //        {
-        //            case "move right":
-        //            Console.WriteLine ("\thit a wall");
-        //            break;
-        //            case "move left":
-        //            Room1();
-        //            break;
-        //            case "quit":
-        //            Console.WriteLine ("are you sure you want to quit?");
-        //            Console.WriteLine ("type yes or \"no\"");
-        //            option = Console.ReadLine ();
-        //            if (option == "yes")
-        //                quit = true;
-        //            break;
-
-        //        }
-        //    }
-
-
-        //}
+   
         static string Menu()
         {
             string input;
@@ -93,14 +38,70 @@ namespace Lab1
         // room1
         static void room1()
         {
-            var quit = false;
-            while (!quit)
+            currentRoom = "you are in room 1";
+           
+
+            var exit = false;
+            while (!exit)
             {
 
-                Command input = HandleCommand ();
+                direction input = HandleCommand ();
                 switch (input)
                 {
-                    //case 
+                    case direction.north:
+
+                    break;
+
+                    case direction.east:
+                    room2 ();
+
+                    break;
+
+                    case direction.south:
+                    Console.WriteLine ("you hit the wall");
+
+                    break;
+
+                    case direction.west:
+
+                    break;
+
+                }
+
+
+
+            }
+
+        }
+
+
+        static void room2 ()
+        {
+            currentRoom = "you are in room 2";
+            var exit = false;
+            while (!exit)
+            {
+
+                direction input = HandleCommand ();
+                switch (input)
+                {
+                    case direction.north:
+
+                    break;
+
+                    case direction.east:
+
+                    break;
+
+                    case direction.south:
+                    Console.WriteLine ("you hit the wall");
+
+                    break;
+
+                    case direction.west:
+                    room1 ();
+
+                    break;
 
                 }
 
@@ -113,24 +114,27 @@ namespace Lab1
 
         enum Command
         {
-            Quit = 1,
+           
             MoveForward = 0,
-            MoveBackward,
-            MoveLeft,
-            MoveRight,
-            TurnLeft,
+            MoveBackward = 2,
+            MoveLeft = -1,
+            MoveRight = 1,
+            TurnLeft = 3,
             TurnRight,
             TurnAround,
             empty,
-            
-            north,
-            east,
-            west,
-            south,
-            direction = Command.east,
-
-
+            Quit
         }
+        
+          enum direction
+        { 
+            
+            north = 0,
+            east = 1,
+            west = 3,
+            south = 2,
+        }
+        
 
 
         static Command ParseCommand ( string input )
@@ -161,7 +165,8 @@ namespace Lab1
             } else if (input == "q")
             {
                 return Command.Quit;
-            } else if (input == "turn left")
+            }
+           else if (input == "turn left")
                 return Command.TurnLeft;
             else if (input == "turn right")
                 return Command.TurnRight;
@@ -169,12 +174,9 @@ namespace Lab1
                 return Command.TurnAround;
 
 
-
-
-
-
             return Command.empty;
         }
+
 
         static Command GetCommand ()
         {
@@ -185,14 +187,14 @@ namespace Lab1
             Console.WriteLine ("\tF)orward");
             Console.WriteLine ("\tL)eft");
             Console.WriteLine ("\tR)ight");
-            Console.WriteLine ("\n\nTurn command");
-            Console.WriteLine ("turn left");
-            Console.WriteLine ("turn right");
-            Console.WriteLine ("turn around");
+            Console.WriteLine ("\nTurn command");
+            Console.WriteLine ("\tturn left");
+            Console.WriteLine ("\tturn right");
+            Console.WriteLine ("\tturn around");
             Console.WriteLine ("Q)quit");
 
 
-
+            Console.Write("Enter a command");
            input= Console.ReadLine ();
            Command command = ParseCommand (input);
 
@@ -202,49 +204,79 @@ namespace Lab1
             return command;
         }
 
-        //static string GetCommand ()
-        //{
-        //    string input;
-        //    Console.WriteLine ("Move commands");
-        //    Console.WriteLine ("\tF)orward");
-        //    Console.WriteLine ("\tB)ackward");
-        //    Console.WriteLine ("\tF)orward");
-        //    Console.WriteLine ("\tL)eft");
-        //    Console.WriteLine ("\tR)ight");
-        //    Console.WriteLine ("\nTurn command");
-        //    Console.WriteLine ("turn left");
-        //    Console.WriteLine ("turn right");
-        //    Console.WriteLine ("turn around");
-
-
-        //    Console.WriteLine ("Q)quit");
-
-
-        //    input= Console.ReadLine ();
-
-        //    //Get input from user
-        //    String command = ParseCommand (input);
-        //    while(command == "")
-        //    {
-        //        Console.WriteLine (" no input invalid try again");
-        //        GetCommand ();
-        //    }
-        //    //If valid then return the command otherwise display error and keep prompting
-        //    return command;
-        //}
-
-        static Command HandleCommand ()
+        static direction HandleCommand ()
         {
-            Command currentDirection = Command.direction;
+            //direction currentDirection = direction.north;
+            int currentd = 0;
+            direction results = 0;
 
             var quit = false;
+
+           
+
+
             while (!quit)
             {
-                Console.WriteLine ("you are facing " + Command.direction);
+                Console.WriteLine ( currentRoom +" facing " + currentDirection);
+                Console.WriteLine ();
+
                 Command command = GetCommand ();
 
-                Console.WriteLine ((int)command);
-                Console.WriteLine (command);
+                while (command == Command.empty)
+                {
+                    Console.WriteLine ("Invalid command try again!");
+                    command = GetCommand ();
+
+                }
+
+
+                //Command command = GetCommand ();
+
+
+                if (command == Command.TurnAround || command == Command.TurnLeft || command == Command.TurnRight)
+                {
+                    int mod;
+
+                    if (command == Command.TurnRight)
+                        currentd = 1;
+                    if (command == Command.TurnLeft)
+                        currentd = -1;
+                    if (command == Command.TurnAround)
+                        currentd = 2;
+
+                    mod = ((int)currentDirection + currentd + 4) % 4;
+
+                    if (mod == 0)
+                        currentDirection = direction.north;
+                    else if (mod == 1)
+                        currentDirection = direction.east;
+                    else if (mod == 2)
+                        currentDirection = direction.south;
+                    else
+                        currentDirection = direction.west;
+ 
+
+                }else
+                {
+                    int mod;
+                    mod = ((int)currentDirection + (int)command + 4) % 4;
+
+                    if (mod == 0)
+                        results = direction.north;
+                    else if (mod == 1)
+                        results = direction.east;
+                    else if (mod == 2)
+                        results = direction.south;
+                    else if (mod == 3)
+                        results = direction.west;
+                    return results;
+
+
+                }
+
+               
+
+
 
 
 
@@ -258,21 +290,21 @@ namespace Lab1
 
 
 
-                
-               
-
-               
-            
 
 
 
-            
+
+
+
+
+
+
 
 
 
 
             //Pass the rest back to the room to handle
-            return Command.empty;
+            return results;
         }
 
 
@@ -293,6 +325,9 @@ namespace Lab1
 
             return "";
         }
+
+        static direction currentDirection = direction.north;
+        static string currentRoom;
     }
 
    
