@@ -77,7 +77,7 @@ namespace Lab1
 
         static void room2 ()
         {
-            currentRoom = "you are in room 2";
+            currentRoom = "you are in room 2"; 
             var exit = false;
             while (!exit)
             {
