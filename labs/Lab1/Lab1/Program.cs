@@ -224,7 +224,7 @@ namespace Lab1
 
                 while (command == Command.empty)
                 {
-                    Console.WriteLine ("Invalid command try again!");
+                    Console.WriteLine ("Invalid command try again!"); 
                     command = GetCommand ();
 
                 }
