@@ -373,7 +373,7 @@ namespace Lab1
 
                 case direction.west:
                 Console.WriteLine ("   **No exit you hit the wall**"); 
-                room11 ();
+                room11 (); 
 
                 break;
 
