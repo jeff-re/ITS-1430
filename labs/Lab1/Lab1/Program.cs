@@ -385,7 +385,7 @@ namespace Lab1
         {
             Console.WriteLine ("you reached the deck");
 
-            Console.WriteLine (" Congraturations YOU WON ");
+            Console.WriteLine (" Congraturations YOU WON "); 
             Environment.Exit (0);
 
 
