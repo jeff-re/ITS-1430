@@ -4,117 +4,396 @@ namespace Lab1
 {
     class Program
     {
-        static void Main(/*string[] args*/)
+        static void Main (/*string[] args*/)
         {
 
-            room1 ();
-            
-            //while(command != "quit")
-            //{
-            //    HandleCommand ();
-            //}
-          
-            //string test;
-           // Room1 ();
-
-
-
+            Console.WriteLine ("You in the bridge of a war ship make your way up to the deck");
+            room1 (); // start 
 
         }
 
-   
-        static string Menu()
+
+       // starting room
+        static void room1 ()
         {
-            string input;
-            Console.WriteLine ("controls: Type:");
-            Console.WriteLine ("\t\tmove left\n" +
-                "\t\tmove right,");
-            Console.WriteLine ("\t\tquit\n\n");
-            input= Console.ReadLine();
-            return input;
+            currentRoom = "you are in the Bridge";
 
-        }
-
-        // room1
-        static void room1()
-        {
-            currentRoom = "you are in room 1";
-           
-
-            var exit = false;
-            while (!exit)
+            direction input = HandleCommand (); //get command from user
+            switch (input)
             {
+                case direction.north: 
+                room3 ();   // move player 
 
-                direction input = HandleCommand ();
-                switch (input)
-                {
-                    case direction.north:
+                break;
 
-                    break;
+                case direction.east:
+                room2 ();
 
-                    case direction.east:
-                    room2 ();
+                break;
 
-                    break;
+                case direction.south:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room1 ();
 
-                    case direction.south:
-                    Console.WriteLine ("you hit the wall");
+                break;
 
-                    break;
+                case direction.west:
+                room4 ();
 
-                    case direction.west:
-
-                    break;
-
-                }
-
-
+                break;
 
             }
-
         }
 
 
         static void room2 ()
         {
-            currentRoom = "you are in room 2"; 
-            var exit = false;
-            while (!exit)
+            currentRoom = "you are in the Navigation Room";
+
+
+            direction input = HandleCommand ();
+            switch (input)
             {
+                case direction.north:
 
-                direction input = HandleCommand ();
-                switch (input)
-                {
-                    case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room2 ();
 
-                    break;
+                break;
 
-                    case direction.east:
+                case direction.east:
 
-                    break;
+                room5 ();
 
-                    case direction.south:
-                    Console.WriteLine ("you hit the wall");
+                break;
 
-                    break;
+                case direction.south:
+                room6 ();
 
-                    case direction.west:
-                    room1 ();
+                break;
 
-                    break;
+                case direction.west:
+                room1 ();
 
-                }
+                break;
+
+            }
 
 
+        }
+
+        static void room3 ()
+        {
+            currentRoom = "you are in the captains cabin";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room3 ();
+
+                break;
+
+                case direction.east:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room3 ();
+
+                break;
+
+                case direction.south:
+                room1 ();
+
+                break;
+
+                case direction.west:
+
+                room11 ();
+                break;
+
+            }
+
+
+
+
+
+        }
+
+        static void room4 ()
+        {
+            currentRoom = "you are in the Gun Room";
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                room11 ();
+
+                break;
+
+                case direction.east:
+                room1 ();
+
+                break;
+
+                case direction.south:
+                room8 ();
+
+                break;
+
+                case direction.west:
+                room10 ();
+
+                break;
 
             }
 
         }
 
+        static void room5 ()
+        {
+            currentRoom = "you are in the crew's cabin";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room5 ();
+
+                break;
+
+                case direction.east:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room5 ();
+
+                break;
+
+                case direction.south:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room5 ();
+
+                break;
+
+                case direction.west:
+                room2 ();
+
+                break;
+
+            }
+
+        }
+
+        static void room6 ()
+        {
+            currentRoom = "you are in the combat info center";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                room2 ();
+
+                break;
+
+                case direction.east:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room6 ();
+
+                break;
+
+                case direction.south:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room6 ();
+
+                break;
+
+                case direction.west:
+                room7 ();
+
+                break;
+
+            }
+
+        }
+
+        static void room7 ()
+        {
+            currentRoom = "you are in the cargo hold";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room7 ();
+
+                break;
+
+                case direction.east:
+                room6 ();
+
+                break;
+
+                case direction.south:
+                room12 ();
+
+                break;
+
+                case direction.west:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room7 ();
+
+                break;
+
+            }
+
+
+        }
+
+        static void room8 ()
+        {
+            currentRoom = "you are in the kitchen";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                room4 ();
+
+                break;
+
+                case direction.east:
+                Console.WriteLine ("No exit you hit the wall");
+                room8 ();
+
+                break;
+
+                case direction.south:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room8 ();
+
+                break;
+
+                case direction.west:
+                room9 ();
+
+                break;
+
+            }
+
+        }
+        static void room9 ()
+        {
+            currentRoom = "you are in the engine room";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                room10 ();
+
+                break;
+
+                case direction.east:
+                room8 ();
+
+                break;
+
+                case direction.south:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room9 ();
+
+                break;
+
+                case direction.west:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room9 ();
+
+                break;
+
+            }
+
+        }
+
+        static void room10 ()
+        {
+            currentRoom = "you are in the sick bay";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room10 ();
+
+                break;
+
+                case direction.east:
+                room4 ();
+
+                break;
+
+                case direction.south:
+                room9 ();
+
+                break;
+
+                case direction.west:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room10 ();
+
+                break;
+
+            }
+
+        }
+
+        static void room11 ()
+        {
+            currentRoom = "you are in the ward room";
+
+            direction input = HandleCommand ();
+            switch (input)
+            {
+                case direction.north:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room11 ();
+
+                break;
+
+                case direction.east:
+                room3 ();
+
+                break;
+
+                case direction.south:
+                room4 ();
+
+                break;
+
+                case direction.west:
+                Console.WriteLine ("   **No exit you hit the wall**");
+                room11 ();
+
+                break;
+
+            }
+
+        }
+
+        static void room12 ()
+        {
+            Console.WriteLine ("you reached the deck");
+
+            Console.WriteLine (" Congraturations YOU WON ");
+            Environment.Exit (0);
+
+
+        }
 
         enum Command
         {
-           
+
             MoveForward = 0,
             MoveBackward = 2,
             MoveLeft = -1,
@@ -125,20 +404,21 @@ namespace Lab1
             empty,
             Quit
         }
-        
-          enum direction
-        { 
-            
+
+        enum direction
+        {
+
             north = 0,
             east = 1,
             west = 3,
             south = 2,
         }
-        
+
 
 
         static Command ParseCommand ( string input )
         {
+
             if (String.IsNullOrEmpty (input))
             {
                 Console.WriteLine ("Try again");
@@ -165,8 +445,7 @@ namespace Lab1
             } else if (input == "q")
             {
                 return Command.Quit;
-            }
-           else if (input == "turn left")
+            } else if (input == "turn left")
                 return Command.TurnLeft;
             else if (input == "turn right")
                 return Command.TurnRight;
@@ -180,25 +459,29 @@ namespace Lab1
 
         static Command GetCommand ()
         {
+            // display the controls
             string input;
             Console.WriteLine ("Move commands");
+
             Console.WriteLine ("\tF)orward");
             Console.WriteLine ("\tB)ackward");
-            Console.WriteLine ("\tF)orward");
             Console.WriteLine ("\tL)eft");
             Console.WriteLine ("\tR)ight");
-            Console.WriteLine ("\nTurn command");
-            Console.WriteLine ("\tturn left");
-            Console.WriteLine ("\tturn right");
-            Console.WriteLine ("\tturn around");
+
+            Console.WriteLine ("\nTurn commands")
+                ;
+            Console.WriteLine ("\tTurn left");
+            Console.WriteLine ("\tTurn right");
+            Console.WriteLine ("\tTurn around");
+
             Console.WriteLine ("Q)quit");
 
+            //get the command
+            Console.Write ("Enter a command: ");
+            input= Console.ReadLine ();
+            Command command = ParseCommand (input);
 
-            Console.Write("Enter a command");
-           input= Console.ReadLine ();
-           Command command = ParseCommand (input);
 
-           
 
 
             return command;
@@ -206,33 +489,49 @@ namespace Lab1
 
         static direction HandleCommand ()
         {
-            //direction currentDirection = direction.north;
-            int currentd = 0;
+            int currentd = 0; // current direction the player is facing 
             direction results = 0;
 
             var quit = false;
 
-           
-
-
             while (!quit)
             {
-                Console.WriteLine ( currentRoom +" facing " + currentDirection);
+                // display direction the player is facing
+                Console.WriteLine ();
+                Console.WriteLine (currentRoom +" facing " + currentDirection);
                 Console.WriteLine ();
 
+                // get input from user
                 Command command = GetCommand ();
+                Console.WriteLine ("********************************************");
+                Console.WriteLine ();
 
+                //display error if command is not recognized
                 while (command == Command.empty)
                 {
-                    Console.WriteLine ("Invalid command try again!"); 
+                    Console.WriteLine ("  **Invalid command Try again!**");
+                    Console.WriteLine ();
                     command = GetCommand ();
 
                 }
 
+                //verify quit command
+                if (command == Command.Quit)
+                {
+                    string input;
+                    Console.WriteLine ("Are you shure you want to quit?");
+                    Console.Write ("Enter Y or N: ");
+                    input = Console.ReadLine ();
+                    if (input == "y")
+                    {
+                        Environment.Exit (0);
+                    } else
+                        HandleCommand ();
 
-                //Command command = GetCommand ();
+                }
 
 
+                // if the user enters a turn command the direction the player is currently facing is updated
                 if (command == Command.TurnAround || command == Command.TurnLeft || command == Command.TurnRight)
                 {
                     int mod;
@@ -254,10 +553,12 @@ namespace Lab1
                         currentDirection = direction.south;
                     else
                         currentDirection = direction.west;
- 
 
-                }else
+
+                } else
                 {
+                    // return direction of the room the player should move.
+
                     int mod;
                     mod = ((int)currentDirection + (int)command + 4) % 4;
 
@@ -274,61 +575,16 @@ namespace Lab1
 
                 }
 
-               
-
-
-
-
-
-
-
-
-
 
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Pass the rest back to the room to handle
+         
             return results;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-        static string menu2()
-        {
-            Console.WriteLine ("");
-
-            return "";
-        }
 
         static direction currentDirection = direction.north;
         static string currentRoom;
     }
 
-   
+
 }
