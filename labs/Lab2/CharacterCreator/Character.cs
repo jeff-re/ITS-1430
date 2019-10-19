@@ -10,46 +10,51 @@ namespace CharacterCreator
     {
         #region properties
 
+        // Name of character
         public string Name
         {
-            //null coalescing
-            // !String.IsNullOrEmpty(_title) ? _title : ""
             get { return _name ?? ""; }
             set { _name = value; }
         }
 
+        //Character description
         public string Description
         {
             get { return _description ?? ""; }
             set { _description = value; }
         }
 
+        //Character profession
         public string Profession
         {
             get { return _profession  ?? ""; }
             set { _profession  = value; }
         }
 
+        // Character race
         public string Race
         {
             get { return _race  ?? ""; }
             set { _race  = value; }
         }
 
-        public int Strength { get; set; } = 50;
-        public int Intelligence { get; set; } = 50;
+        // character attributes 
+        public int Strength { get; set; }
+        public int Intelligence { get; set; }
 
-        public int Agility { get; set; } = 50;
+        public int Agility { get; set; }
 
-        public int Constitution { get; set; } = 50;
+        public int Constitution { get; set; }
 
-        public int Charisma { get; set; } = 50;
+        public int Charisma { get; set; }
 
+        // display charcter name on roster
         public override string ToString ()
         {
-            return $"{Name} ({Strength}) ";
+            return $"{Name}";
         }
 
+        //Validate inputs
         public string Validate ()
         {
             if (string.IsNullOrEmpty (this.Name))
@@ -74,21 +79,14 @@ namespace CharacterCreator
 
         }
 
-
-
-        #endregion
-
-
-
+        #endregion private members
 
         #region private Members
+
         private string _name = "";
         private string _description = "";
         private string _profession = "";
         private string _race = "";
-
-
-
 
         #endregion
     }

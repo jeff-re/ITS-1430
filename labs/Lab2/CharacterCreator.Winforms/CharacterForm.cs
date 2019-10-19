@@ -19,29 +19,17 @@ namespace CharacterCreator.Winforms
 
         public CharacterForm ( string title ) : this ()
         {
-            //Handled by ctor chaining
-            //Init();
-            //InitializeComponent();
-
             Text = title;
         }
 
-
-
         public Character Character { get; set; }
-
-
-
-
 
         protected override void OnLoad ( EventArgs e )
         {
            
-            ///Init();
-
-            //Call base type
-            //OnLoad(e);
             base.OnLoad (e);
+
+            //set default character attributes to 50
             _txtStrength.Text= "50";
             _txtIntelligence.Text =  "50";
             _txtAgility.Text= "50";
@@ -51,8 +39,6 @@ namespace CharacterCreator.Winforms
 
             if (Character != null)
             {
-
-
                 _txtName.Text= Character.Name;
                 cbProfession.Text= Character.Profession;
                 cbRace.Text= Character.Race;
@@ -61,19 +47,13 @@ namespace CharacterCreator.Winforms
                 _txtAgility.Text= Character.Agility.ToString ();
                 _txtConstitution.Text= Character.Constitution.ToString ();
                 _txtCharisma.Text= Character.Charisma.ToString ();
-                _txtName.Text= Character.Description;
-
+                txtDescription.Text= Character.Description;
             };
-
             
             ValidateChildren ();
         }
-
-
-
-
-
-        private void BtnSave_Click ( object sender, EventArgs e )
+        
+        private void OnBtnSave_Click ( object sender, EventArgs e )
         {
             if (!ValidateChildren ())
                 return;
@@ -99,14 +79,13 @@ namespace CharacterCreator.Winforms
                 return;
             };
 
-            //TODO: Save it
+            //save character info
             Character = character;
 
             DialogResult = DialogResult.OK;
             Close ();
 
         }
-
 
         private int GetAsInt32 ( TextBox control )
         {
@@ -116,6 +95,7 @@ namespace CharacterCreator.Winforms
             return 0;
         }
 
+        //Validate name
         private void OnValidatingName ( object sender, CancelEventArgs e )
         {
             var control = sender as TextBox;
@@ -131,11 +111,12 @@ namespace CharacterCreator.Winforms
             }
         }
 
+        //validate profession
         private void OnValidatingProfession ( object sender, CancelEventArgs e )
         {
             var control = sender as ComboBox;
 
-            //Text is required
+            //profession is required
             if (control.SelectedIndex == -1)
             {
                 e.Cancel = true;
@@ -146,6 +127,7 @@ namespace CharacterCreator.Winforms
             }
         }
 
+        //validate character race
         private void OnValidatingRace ( object sender, CancelEventArgs e )
         {
             var control = sender as ComboBox;
@@ -161,6 +143,7 @@ namespace CharacterCreator.Winforms
             }
         }
 
+        //Validate Character attributes
         private void OnValidatingAttributes ( object sender, CancelEventArgs e )
         {
             var control = sender as TextBox;
@@ -176,9 +159,13 @@ namespace CharacterCreator.Winforms
             }
         }
 
+        private void BtnCancel_Click ( object sender, EventArgs e )
+        {
+            DialogResult = DialogResult.Cancel;
+            Close ();
 
+        }
 
-
-
+    
     }
 }

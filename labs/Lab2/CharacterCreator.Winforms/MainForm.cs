@@ -15,24 +15,24 @@ namespace CharacterCreator.Winforms
         public MainForm ()
         {
             InitializeComponent ();
+
+            var character = new Character ();
+            character.Name = "Default";
+            character.Profession = "Fighter";
+            character.Race = "Human";
+            character.Intelligence = 70;
+            character.Strength = 82;
+            character.Agility = 74;
+            character.Charisma = 90;
+            character.Constitution = 55; 
+
+            AddCharacter (character);
+            UpdateUI ();
+
         }
-
-        private void OnFileExit ( object sender, EventArgs e )
-        {
-            Close ();
-
-        }
-
-        private void OnHelpAbout ( object sender, EventArgs e )
-        {
-            var form = new AboutForm ();
-            form.ShowDialog (this);
-
-        }
-
         private void onCharacterNew ( object sender, EventArgs e )
         {
-            var form = new CharacterForm();
+            var form = new CharacterForm("Create New Character");
             if (form.ShowDialog (this) == DialogResult.OK)
             {
                 AddCharacter (form.Character);
@@ -55,36 +55,58 @@ namespace CharacterCreator.Winforms
             };
         }
 
-
         private void OnCharacterEdit ( object sender, EventArgs e )
         {
-            //Get selected movie
+            //Get selected character
             var character = GetSelectedMovie ();
             if (character == null)
                 return;
             
-            var form = new CharacterForm ();
+            var form = new CharacterForm ("Edit Character");
             form.Character = character;
 
             if (form.ShowDialog (this) == DialogResult.OK)
             {
-                //TODO: Change to update
                 RemoveCharacter (character);
-                //RemoveMovie(form.Movie);
                 AddCharacter (form.Character);
                 UpdateUI ();
+
             };
         }
 
+        private void OnCharacterDelete ( object sender, EventArgs e )
+        {
+            var character = GetSelectedMovie ();
+            if (character == null)
+                return;
 
+            //delete Confirmation
+            var msg = $"Are you sure you want to delete {character.Name}?";
+            var result = MessageBox.Show (msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result != DialogResult.Yes)
+                return;
 
+            //Delete it
+            RemoveCharacter (character);
+            UpdateUI ();
+        }
 
+        private void OnHelpAbout ( object sender, EventArgs e )
+        {
+            var form = new AboutForm ();
+            form.ShowDialog (this);
 
+        }
 
+        private void OnFileExit ( object sender, EventArgs e )
+        {
+            Close ();
+
+        }
 
         private Character[] GetCharacters ()
         {
-            //Filter out empty movies
+            //Filter out empty characters
             var count = 0;
             foreach (var character in _characters)
                 if (character != null)
@@ -92,13 +114,13 @@ namespace CharacterCreator.Winforms
 
             var index = 0;
             var characters = new Character[count];
+
             foreach (var character in _characters)
                 if (character != null)
                     characters[index++] = character;
 
             return characters;
         }
-
 
         private void UpdateUI ()
         {
@@ -115,7 +137,6 @@ namespace CharacterCreator.Winforms
            
 
             return item as Character;
-
            
         }
 
@@ -134,12 +155,8 @@ namespace CharacterCreator.Winforms
         }
 
         private Character[] _characters = new Character[100];
+
     }
-
-
-
-
-
 
 }
 
