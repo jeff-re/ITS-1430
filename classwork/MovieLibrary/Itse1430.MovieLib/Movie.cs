@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace Itse1430.MovieLib
 {
     /// <summary>Represents movie data.</summary>
-    public class Movie
+    public class Movie : IValidatableObject
     {
         #region Properties
 
@@ -15,27 +16,32 @@ namespace Itse1430.MovieLib
         //Can be backed by fields but not required
         //Can be read, written or both - up to developer
 
+        public int Id { get; set; }
+
         /// <summary>Gets or sets the title of the movie.</summary>
         public string Title
         {
             //null coalescing
             // !String.IsNullOrEmpty(_title) ? _title : ""
-            get { return _title ?? ""; }
-            set { _title = value;  }
+            //get { return _title ?? ""; }
+            get => _title ?? "";
+
+            //set { _title = value; }
+            set  =>  _title = value; 
         }
 
         /// <summary>Gets or sets the description of the movie.</summary>
         public string Description
         {
-            get { return _description ?? ""; }
-            set { _description = value; }
+            get =>_description ?? ""; 
+            set => _description = value; 
         }
 
         /// <summary>Gets or sets the rating of the movie.</summary>
         public string Rating
         {
-            get { return _rating ?? ""; }
-            set { _rating = value; }
+            get => _rating ?? ""; 
+            set => _rating = value; 
         }
 
         /// <summary>Gets or sets the release year.</summary>        
@@ -69,15 +75,19 @@ namespace Itse1430.MovieLib
         //public readonly int ReleaseYearForColor = 1939;
 
         /// <summary>Determines if a movie is B&W.</summary>
-        public bool IsBlackAndWhite
-        {
-            //Calculated property, no backing field
-            //Just calculating a value
-            get { return ReleaseYear <= ReleaseYearForColor; }
+        //public bool IsBlackAndWhite
+        //{
+        //    //Calculated property, no backing field
+        //    //Just calculating a value
+        //    get => ReleaseYear <= ReleaseYearForColor;
 
-            //Not settable by anyone
-            //set { }
-        }
+        //    //Not settable by anyone
+        //    //set { }
+        //}
+
+        public bool IsBlackAndWhite 
+            => ReleaseYear <= ReleaseYearForColor;
+        
 
         //Mixed accessibility - property must be most visible
         public string TestAccessibility
@@ -91,34 +101,65 @@ namespace Itse1430.MovieLib
         #endregion
 
         public override string ToString ()
-        {
-            return $"{Title} ({ReleaseYear})";
-        }
+                   => $"{Title} ({ReleaseYear})";
+
+        //{
+        //    return $"{Title} ({ReleaseYear})";
+        //}
 
         /// <summary>Validates the movie.</summary>
         /// <returns>An error message if validation fails or empty string otherwise.</returns>
-        public string Validate ()
+        //public string Validate ()
+        //{
+        //    //`this` is implicit first parameter, represents instance
+        //    //this.title == title
+
+        //    //Name is required
+        //    if (String.IsNullOrEmpty(this.Title))
+        //        return "Title is required";
+
+        //    //Release year >= 1900
+        //    if (ReleaseYear < 1900)
+        //        return "Release Year must be >= 1900";
+
+        //    //Run length >= 0
+        //    if (RunLength < 0)
+        //        return "Run Length must be >= 0";
+
+        //    //Rating is required
+        //    if (String.IsNullOrEmpty(Rating))
+        //        return "Rating is required";
+
+        //    return "";
+        //}
+
+        //Explicit interface impl
+        //IEnumerable<ValidationResult> IValidatableObject.Validate ( ValidationContext validationContext )        { }
+
+        public IEnumerable<ValidationResult> Validate ( ValidationContext validationContext )
         {
-            //`this` is implicit first parameter, represents instance
-            //this.title == title
-            
+            //Iterator syntax
+            //var results = new List<ValidationResult>();
+
             //Name is required
-            if (String.IsNullOrEmpty(this.Title))
-                return "Title is required";
+            if (String.IsNullOrEmpty (Title))
+                //results.Add(new ValidationResult("Title is required"));
+                yield return new ValidationResult ("Title is required");
 
             //Release year >= 1900
             if (ReleaseYear < 1900)
-                return "Release Year must be >= 1900";
+                //results.Add(new ValidationResult("Release Year must be >= 1900"));
+                yield return new ValidationResult ("Release Year must be >= 1900");
 
             //Run length >= 0
             if (RunLength < 0)
-                return "Run Length must be >= 0";
+                yield return new ValidationResult ("Run Length must be >= 0");
 
             //Rating is required
-            if (String.IsNullOrEmpty(Rating))
-                return "Rating is required";
+            if (String.IsNullOrEmpty (Rating))
+                yield return new ValidationResult ("Rating is required");
 
-            return "";
+            //return results;
         }
 
         #region Private Members
@@ -126,7 +167,7 @@ namespace Itse1430.MovieLib
         //Fields - data to be stored
         //Never make fields public!!
         private string _title = "";
-        private string _description = "";        
+        private string _description = "";
         private string _rating = "";
 
         //private int _releaseYear = 1900;

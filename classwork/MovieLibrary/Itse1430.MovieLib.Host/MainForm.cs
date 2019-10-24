@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Itse1430.MovieLib.Host
@@ -8,25 +10,38 @@ namespace Itse1430.MovieLib.Host
     {
         public MainForm ()
         {
-            InitializeComponent();
-           
+            InitializeComponent ();
+        }
+
+        protected override void OnLoad ( EventArgs e )
+        {
+            base.OnLoad (e);
+
+            //Seed movies
+            _movies = new MemoryMovieDatabase ();
+            var count = _movies.GetAll ().Count ();
+            if (count == 0)
+                //MovieDatabaseExtensions.Seed (_movies);
+                _movies.Seed ();
+                     
+            UpdateUI ();
         }
 
         //Called when Movie\Add selected
         private void OnMovieAdd ( object sender, EventArgs e )
         {
-            var form = new MovieForm();
+            var form = new MovieForm ();
 
             //Modeless - does not block main window
             //form.Show();
 
             //Show the new movie form modally
-            if (form.ShowDialog(this) == DialogResult.OK)
+            if (form.ShowDialog (this) == DialogResult.OK)
             {
-                AddMovie(form.Movie);
-                UpdateUI();
+                _movies.Add (form.Movie);
+                UpdateUI ();
             };
-        }        
+        }
 
         private Movie GetSelectedMovie ()
         {
@@ -38,6 +53,11 @@ namespace Itse1430.MovieLib.Host
             //Movie or null
             return item as Movie;
 
+            //var firstMovie = _lstMovies.SelectedItems
+            //                           .OfType<Movie>()
+            //                           .FirstOrDefault();
+
+            #region Typecasting Demo
             ////Other approaches
             ////C-style cast
             //(Movie)item;
@@ -59,25 +79,23 @@ namespace Itse1430.MovieLib.Host
             //if (item is Movie movie)
             //{
             //};
+            #endregion
         }
 
         private void OnMovieEdit ( object sender, EventArgs e )
         {
             //Get selected movie
-            var movie = GetSelectedMovie();
+            var movie = GetSelectedMovie ();
             if (movie == null)
                 return;
 
-            var form = new MovieForm();
+            var form = new MovieForm ();
             form.Movie = movie;
-            
-            if (form.ShowDialog(this) == DialogResult.OK)
+
+            if (form.ShowDialog (this) == DialogResult.OK)
             {
-                //TODO: Change to update
-                RemoveMovie(movie);
-                //RemoveMovie(form.Movie);
-                AddMovie(form.Movie);
-                UpdateUI();
+                _movies.Update (movie.Id, form.Movie);
+                UpdateUI ();
             };
         }
 
@@ -103,88 +121,87 @@ namespace Itse1430.MovieLib.Host
             //var text3 = menuItem?.Text ?? "";
             #endregion
 
-            var movie = GetSelectedMovie();
+            var movie = GetSelectedMovie ();
             if (movie == null)
                 return;
 
             //Confirmation
             var msg = $"Are you sure you want to delete {movie.Title}?";
-            var result = MessageBox.Show(msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show (msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
                 return;
 
             //Delete it
-            RemoveMovie(movie);
-            UpdateUI();
+            _movies.Remove (movie.Id);
+            UpdateUI ();
         }
 
         private void OnFileExit ( object sender, EventArgs e )
         {
-            Close();
+            Close ();
         }
 
         private void OnHelpAbout ( object sender, EventArgs e )
         {
-            var form = new AboutForm();
-            form.ShowDialog(this);            
+            var form = new AboutForm ();
+            form.ShowDialog (this);
         }
+
+        //Use lambdas for one off methods
+        //private string OrderByTitle ( Movie movie )
+        //{
+        //    return movie.Title;
+        //}
+        //private int OrderByReleaseYear ( Movie movie )
+        //{
+        //    return movie.ReleaseYear;
+        //}
 
         private void UpdateUI ()
         {
-            var movies = GetMovies();
+            var movies = _movies.GetAll ()
+                                .OrderBy (m => m.Title)
+                                .ThenBy (m => m.ReleaseYear);
+            //.OrderBy(OrderByTitle)
+            //.ThenBy(OrderByReleaseYear);
+
+            PlayWithEnumerable (movies);
 
             //Programmatic approach
             //_lstMovies.Items.Clear();
             //_lstMovies.Items.AddRange(movies);
 
-            //For more complex bindings
-            _lstMovies.DataSource = movies;
+            //For more complex bindings                                                
+            _lstMovies.DataSource = movies.ToArray ();
         }
 
-        private void AddMovie ( Movie movie )
+        private void PlayWithEnumerable ( IEnumerable<Movie> movies )
         {
-            //Add to array
-            for (var index = 0; index < _movies.Length; ++index)
+            Movie firstOne = movies.FirstOrDefault ();
+            Movie lastOne = movies.LastOrDefault ();
+            //Movie onlyOne = movies.SingleOrDefault();
+
+            //var coolMovies = movies.Where(m => m.ReleaseYear > 1979
+            //                                    && m.ReleaseYear < 2000);
+
+            int id = 1;
+            var otherMovies = movies.Where (m => m.Id > ++id);
+
+            //The actual generated code...
+            //var temp1 = new NestedType { id = id };
+            //var otherMovies = movies.Where(temp1.WhereCondition);
+            //var lastId = id;
+        }
+
+        private sealed class NestedType
+        {
+            public int id { get; set; }
+            public bool WhereCondition ( Movie m )
             {
-                if (_movies[index] == null)
-                {
-                    _movies[index] = movie;
-                    return;
-                };
-            };
+                return m.Id > ++id;
+            }
         }
 
-        private void RemoveMovie ( Movie movie )
-        {
-            //Remove from array
-            for (var index = 0; index < _movies.Length; ++index)
-            {
-                //This won't work
-                if (_movies[index] == movie)
-                {
-                    _movies[index] = null;
-                    return;
-                };
-            };
-        }
-
-        private Movie[] GetMovies ()
-        {
-            //Filter out empty movies
-            var count = 0;
-            foreach (var movie in _movies)
-                if (movie != null)
-                    ++count;
-
-            var index = 0;
-            var movies = new Movie[count];
-            foreach (var movie in _movies)
-                if (movie != null)
-                    movies[index++] = movie;
-
-            return movies;
-        }
-
-        private Movie[] _movies = new Movie[100];
+        private IMovieDatabase _movies;
     }
 }
