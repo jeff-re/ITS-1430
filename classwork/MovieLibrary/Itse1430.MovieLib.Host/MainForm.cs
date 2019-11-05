@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Forms;
+using Itse1430.MovieLib.IO;
 
 namespace Itse1430.MovieLib.Host
 {
@@ -10,36 +12,54 @@ namespace Itse1430.MovieLib.Host
     {
         public MainForm ()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
 
         protected override void OnLoad ( EventArgs e )
         {
-            base.OnLoad (e);
+            base.OnLoad(e);
 
             //Seed movies
-            _movies = new MemoryMovieDatabase ();
-            var count = _movies.GetAll ().Count ();
+            _movies = new FileMovieDatabase(@"movies.csv");
+            var count = _movies.GetAll().Count();
             if (count == 0)
-                //MovieDatabaseExtensions.Seed (_movies);
-                _movies.Seed ();
-                     
-            UpdateUI ();
+                //MovieDatabaseExtensions.Seed(_movies);
+                _movies.Seed();
+
+            UpdateUI();
         }
 
         //Called when Movie\Add selected
         private void OnMovieAdd ( object sender, EventArgs e )
         {
-            var form = new MovieForm ();
-
-            //Modeless - does not block main window
-            //form.Show();
+            var form = new MovieForm();
 
             //Show the new movie form modally
-            if (form.ShowDialog (this) == DialogResult.OK)
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
-                _movies.Add (form.Movie);
-                UpdateUI ();
+                try
+                {
+                    _movies.Add(form.Movie);
+                    UpdateUI();
+                } catch (ArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                } catch (ValidationException ex)
+                {
+                    MessageBox.Show(ex.Message, "Validation Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                } catch //(Exception ex)
+                {
+                    MessageBox.Show("Save failed", "Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+
+                    //throw;    //rethrow existing exception
+                    //throw ex; //throwing a new exception
+                };
             };
         }
 
@@ -85,17 +105,17 @@ namespace Itse1430.MovieLib.Host
         private void OnMovieEdit ( object sender, EventArgs e )
         {
             //Get selected movie
-            var movie = GetSelectedMovie ();
+            var movie = GetSelectedMovie();
             if (movie == null)
                 return;
 
-            var form = new MovieForm ();
+            var form = new MovieForm();
             form.Movie = movie;
 
-            if (form.ShowDialog (this) == DialogResult.OK)
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
-                _movies.Update (movie.Id, form.Movie);
-                UpdateUI ();
+                _movies.Update(movie.Id, form.Movie);
+                UpdateUI();
             };
         }
 
@@ -121,30 +141,30 @@ namespace Itse1430.MovieLib.Host
             //var text3 = menuItem?.Text ?? "";
             #endregion
 
-            var movie = GetSelectedMovie ();
+            var movie = GetSelectedMovie();
             if (movie == null)
                 return;
 
             //Confirmation
             var msg = $"Are you sure you want to delete {movie.Title}?";
-            var result = MessageBox.Show (msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
                 return;
 
             //Delete it
-            _movies.Remove (movie.Id);
-            UpdateUI ();
+            _movies.Remove(movie.Id);
+            UpdateUI();
         }
 
         private void OnFileExit ( object sender, EventArgs e )
         {
-            Close ();
+            Close();
         }
 
         private void OnHelpAbout ( object sender, EventArgs e )
         {
-            var form = new AboutForm ();
-            form.ShowDialog (this);
+            var form = new AboutForm();
+            form.ShowDialog(this);
         }
 
         //Use lambdas for one off methods
@@ -159,33 +179,36 @@ namespace Itse1430.MovieLib.Host
 
         private void UpdateUI ()
         {
-            var movies = _movies.GetAll ()
-                                .OrderBy (m => m.Title)
-                                .ThenBy (m => m.ReleaseYear);
+            var movies = from m in _movies.GetAll()
+                         orderby m.Title, m.ReleaseYear
+                         select m;
+            //var movies = _movies.GetAll()
+            //                    .OrderBy(m => m.Title)
+            //                    .ThenBy(m => m.ReleaseYear);
             //.OrderBy(OrderByTitle)
             //.ThenBy(OrderByReleaseYear);
 
-            PlayWithEnumerable (movies);
+            PlayWithEnumerable(movies);
 
             //Programmatic approach
             //_lstMovies.Items.Clear();
             //_lstMovies.Items.AddRange(movies);
 
             //For more complex bindings                                                
-            _lstMovies.DataSource = movies.ToArray ();
+            _lstMovies.DataSource = movies.ToArray();
         }
 
         private void PlayWithEnumerable ( IEnumerable<Movie> movies )
         {
-            Movie firstOne = movies.FirstOrDefault ();
-            Movie lastOne = movies.LastOrDefault ();
+            Movie firstOne = movies.FirstOrDefault();
+            Movie lastOne = movies.LastOrDefault();
             //Movie onlyOne = movies.SingleOrDefault();
 
             //var coolMovies = movies.Where(m => m.ReleaseYear > 1979
             //                                    && m.ReleaseYear < 2000);
 
             int id = 1;
-            var otherMovies = movies.Where (m => m.Id > ++id);
+            var otherMovies = movies.Where(m => m.Id > ++id);
 
             //The actual generated code...
             //var temp1 = new NestedType { id = id };

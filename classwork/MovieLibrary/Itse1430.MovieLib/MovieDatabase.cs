@@ -1,75 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 
 namespace Itse1430.MovieLib
 {
-    /// <summary>Manages the movies in a database.</summary>
+    /// <summary>Provides a base type for <see cref="IMovieDatabase"/>.</summary>
     public abstract class MovieDatabase : IMovieDatabase
     {
         public Movie Add ( Movie movie )
         {
-            //TODO: Validation
+            //Validation
+            //if (movie == null)             return null;
+            //throw new Exception("Movie is null");
             if (movie == null)
-                return null;
+                throw new ArgumentNullException(nameof(movie));
 
             //if (!String.IsNullOrEmpty(movie.Validate()))
             //var context = new ValidationContext(movie);
             //var results = movie.Validate(context);
-            var results = ObjectValidator.TryValidateObject (movie);
-            if (results.Count () > 0)
-                return null;
+            var results = ObjectValidator.TryValidateObject(movie);
+            if (results.Count() > 0)
+                //return null;
+                throw new ValidationException(
+                            results.FirstOrDefault().ErrorMessage
+                        );
 
             //Name must be unique
-            var existing = GetByNameCore (movie.Title);
+            var existing = GetByNameCore(movie.Title);
             if (existing != null)
-                return null;
+                //return null;
+                throw new ArgumentException("Movie must be unique");
 
-            return AddCore (movie);
+            return AddCore(movie);
         }
-
+        
         public void Remove ( int id )
         {
-            //TODO: Validate ID
-            RemoveCore (id);
-        }
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException(nameof(id), 
+                                                      "Id must be > 0.");
+
+            RemoveCore(id);
+        }        
 
         public Movie Get ( int id )
         {
-            //TODO: Validate
             if (id <= 0)
-                return null;
+                throw new ArgumentOutOfRangeException(nameof(id),
+                                                      "Id must be > 0.");
 
-            return GetCore (id);
-        }
+            return GetCore(id);
+        }        
 
         public IEnumerable<Movie> GetAll ()
-        {
-            return GetAllCore ();
-        }
+                => GetAllCore() ?? Enumerable.Empty<Movie>();
 
         public void Update ( int id, Movie newMovie )
         {
-            //TODO: Validate
+            //Validate
             if (id <= 0)
-                return;
+                throw new ArgumentOutOfRangeException(nameof(id),
+                                                      "Id must be > 0.");
             if (newMovie == null)
-                return;
+                throw new ArgumentNullException(nameof(newMovie));
 
-            //if (!String.IsNullOrEmpty(movie.Validate()))
-            //var context = new ValidationContext(newMovie);
-            //var results = newMovie.Validate(context);
-            var results = ObjectValidator.TryValidateObject (newMovie);
-            if (results.Count () > 0)
-                return;
+            var results = ObjectValidator.TryValidateObject(newMovie);
+            if (results.Count() > 0)
+                throw new ValidationException(
+                            results.FirstOrDefault().ErrorMessage);
 
             //Must be unique
-            var existing = GetByNameCore (newMovie.Title);
+            var existing = GetByNameCore(newMovie.Title);
             if (existing != null && existing.Id != id)
-                return;
+                throw new ArgumentException("Movie must be unique.");
 
-            UpdateCore (id, newMovie);
-        }
+            try
+            {
+                UpdateCore(id, newMovie);
+            } catch (IOException ex)
+            {
+                throw new Exception("An error occurred updating the movie.", ex);
+            };
+        }        
 
         /// <summary>Add a movie to database.</summary>
         /// <param name="movie">Movie to add.</param>
