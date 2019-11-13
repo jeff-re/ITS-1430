@@ -181,7 +181,7 @@ namespace Itse1430.MovieLib.SqlServer
                 //FIX: Set Id
                 movie.Id = id;
 
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure; 
 
                 var parmName = new SqlParameter ("@name", movie.Title);
                 cmd.Parameters.Add (parmName);
