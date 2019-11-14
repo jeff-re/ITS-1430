@@ -14,49 +14,50 @@ namespace Itse1430.MovieLib.Host
     {
         public MainForm ()
         {
-            InitializeComponent();
+            InitializeComponent ();
         }
 
         protected override void OnLoad ( EventArgs e )
         {
-            base.OnLoad(e);
+            base.OnLoad (e);
+
+            //_movies = new FileMovieDatabase(@"movies.csv");            
+            var connString = ConfigurationManager.ConnectionStrings["MovieDatabase"];
+            _movies = new SqlMovieDatabase (connString.ConnectionString);
 
             //Seed movies
-            var connString = ConfigurationManager.ConnectionStrings["MovieDatabase"];
-            //_movies = new FileMovieDatabase(@"movies.csv");
-            _movies = new SqlMovieDatabase(connString.ConnectionString);
             //var count = _movies.GetAll().Count();
             //if (count == 0)
             //    _movies.Seed();
 
-            UpdateUI();
+            UpdateUI ();
         }
 
         //Called when Movie\Add selected
         private void OnMovieAdd ( object sender, EventArgs e )
         {
-            var form = new MovieForm();
+            var form = new MovieForm ();
 
             //Show the new movie form modally
-            if (form.ShowDialog(this) == DialogResult.OK)
+            if (form.ShowDialog (this) == DialogResult.OK)
             {
                 try
                 {
-                    _movies.Add(form.Movie);
-                    UpdateUI();
+                    _movies.Add (form.Movie);
+                    UpdateUI ();
                 } catch (ArgumentException ex)
                 {
-                    MessageBox.Show(ex.Message, "Error",
+                    MessageBox.Show (ex.Message, "Error",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
                 } catch (ValidationException ex)
                 {
-                    MessageBox.Show(ex.Message, "Validation Error",
+                    MessageBox.Show (ex.Message, "Validation Error",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
-                } catch //(Exception ex)
+                } catch (Exception ex)
                 {
-                    MessageBox.Show("Save failed", "Error",
+                    MessageBox.Show ("Save failed", "Error",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
 
@@ -108,36 +109,36 @@ namespace Itse1430.MovieLib.Host
         private void OnMovieEdit ( object sender, EventArgs e )
         {
             //Get selected movie
-            var movie = GetSelectedMovie();
+            var movie = GetSelectedMovie ();
             if (movie == null)
                 return;
 
-            var form = new MovieForm();
+            var form = new MovieForm ();
             form.Movie = movie;
 
-            if (form.ShowDialog(this) != DialogResult.OK)
+            if (form.ShowDialog (this) != DialogResult.OK)
                 return;
 
             try
             {
-                _movies.Update(movie.Id, form.Movie);
-                UpdateUI();
+                _movies.Update (movie.Id, form.Movie);
+                UpdateUI ();
             } catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Error",
+                MessageBox.Show (ex.Message, "Error",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             } catch (ValidationException ex)
             {
-                MessageBox.Show(ex.Message, "Validation Error",
+                MessageBox.Show (ex.Message, "Validation Error",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
-            } catch
+            } catch (Exception ex)
             {
-                MessageBox.Show("Save failed", "Error",
+                MessageBox.Show ("Save failed", "Error",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
-            };                
+            };
         }
 
         private void OnMovieDelete ( object sender, EventArgs e )
@@ -162,36 +163,36 @@ namespace Itse1430.MovieLib.Host
             //var text3 = menuItem?.Text ?? "";
             #endregion
 
-            var movie = GetSelectedMovie();
+            var movie = GetSelectedMovie ();
             if (movie == null)
                 return;
 
             //Confirmation
             var msg = $"Are you sure you want to delete {movie.Title}?";
-            var result = MessageBox.Show(msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show (msg, "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
                 return;
 
             //Delete it
             try
             {
-                _movies.Remove(movie.Id);
-                UpdateUI();
+                _movies.Remove (movie.Id);
+                UpdateUI ();
             } catch (Exception ex)
             {
-                MessageBox.Show("Delete failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show ("Delete failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
         }
 
         private void OnFileExit ( object sender, EventArgs e )
         {
-            Close();
+            Close ();
         }
 
         private void OnHelpAbout ( object sender, EventArgs e )
         {
-            var form = new AboutForm();
-            form.ShowDialog(this);
+            var form = new AboutForm ();
+            form.ShowDialog (this);
         }
 
         //Use lambdas for one off methods
@@ -206,7 +207,7 @@ namespace Itse1430.MovieLib.Host
 
         private void UpdateUI ()
         {
-            var movies = from m in _movies.GetAll()
+            var movies = from m in _movies.GetAll ()
                          orderby m.Title, m.ReleaseYear
                          select m;
             //var movies = _movies.GetAll()
@@ -215,27 +216,27 @@ namespace Itse1430.MovieLib.Host
             //.OrderBy(OrderByTitle)
             //.ThenBy(OrderByReleaseYear);
 
-            PlayWithEnumerable(movies);
+            PlayWithEnumerable (movies);
 
             //Programmatic approach
             //_lstMovies.Items.Clear();
             //_lstMovies.Items.AddRange(movies);
 
             //For more complex bindings                                                
-            _lstMovies.DataSource = movies.ToArray();
+            _lstMovies.DataSource = movies.ToArray ();
         }
 
         private void PlayWithEnumerable ( IEnumerable<Movie> movies )
         {
-            Movie firstOne = movies.FirstOrDefault();
-            Movie lastOne = movies.LastOrDefault();
+            Movie firstOne = movies.FirstOrDefault ();
+            Movie lastOne = movies.LastOrDefault ();
             //Movie onlyOne = movies.SingleOrDefault();
 
             //var coolMovies = movies.Where(m => m.ReleaseYear > 1979
             //                                    && m.ReleaseYear < 2000);
 
             int id = 1;
-            var otherMovies = movies.Where(m => m.Id > ++id);
+            var otherMovies = movies.Where (m => m.Id > ++id);
 
             //The actual generated code...
             //var temp1 = new NestedType { id = id };
