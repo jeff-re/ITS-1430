@@ -73,7 +73,7 @@ namespace Itse1430.MovieLib
         {
             get => "";
 
-            //Not writable outside class
+            //Not writable outside clas
             private set { }
         }
         #endregion
