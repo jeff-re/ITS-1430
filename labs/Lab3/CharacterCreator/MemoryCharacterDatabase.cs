@@ -62,7 +62,7 @@ namespace CharacterCreator
             if (existing == null)
                 return null;
 
-            //Update existing character
+            //Update existing character 
             newCharacter.Id = id;
             Clone (existing, newCharacter);
 
