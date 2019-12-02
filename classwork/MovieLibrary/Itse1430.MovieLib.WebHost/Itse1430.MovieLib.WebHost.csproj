@@ -207,7 +207,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55793</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55793/</IISUrl>
+          <IISUrl>http://localhost:55793/movie/index</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:55793/movie/index</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
