@@ -45,7 +45,6 @@ namespace Itse1430.MovieLib.WebHost.Models
                 Rating = source.Rating,
                 ReleaseYear = source.ReleaseYear,
                 RunLength = source.RunLength
-                //test
             };
         }
     }
