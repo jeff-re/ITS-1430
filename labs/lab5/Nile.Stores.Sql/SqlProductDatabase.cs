@@ -13,64 +13,62 @@ namespace Nile.Stores.Sql
 {
     public class SqlProductDatabase : ProductDatabase
     {
-        public SqlProductDatabase (string connectionString)
+        public SqlProductDatabase ( string connectionString )
         {
             _connectionString = connectionString;
         }
 
-        protected override Product AddCore(Product product)
+        protected override Product AddCore ( Product product )
         {
-            using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand("AddProduct", conn))
+            using (var conn = CreateConnection ())
+            using (var cmd = new SqlCommand ("AddProduct", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                var parmName = new SqlParameter("@name", product.Name);
-                cmd.Parameters.Add(parmName);
-                cmd.Parameters.AddWithValue("@price", product.Price);
-                cmd.Parameters.AddWithValue("@description", product.Description);
-                cmd.Parameters.AddWithValue("@isDiscontinued", product.IsDiscontinued);
+                var parmName = new SqlParameter ("@name", product.Name);
+                cmd.Parameters.Add (parmName);
+                cmd.Parameters.AddWithValue ("@price", product.Price);
+                cmd.Parameters.AddWithValue ("@description", product.Description);
+                cmd.Parameters.AddWithValue ("@isDiscontinued", product.IsDiscontinued);
 
-                conn.Open();
-                var result = (decimal)cmd.ExecuteScalar();
-                product.Id = Convert.ToInt32(result);
+                conn.Open ();
+                var result = (decimal)cmd.ExecuteScalar ();
+                product.Id = Convert.ToInt32 (result);
 
                 return product;
             };
         }
 
-        protected override IEnumerable<Product> GetAllCore()
+        protected override IEnumerable<Product> GetAllCore ()
         {
-            var ds = new DataSet();
+            var ds = new DataSet ();
 
             //Create a connection and open
-            using (var conn = CreateConnection())
+            using (var conn = CreateConnection ())
             {
-                using (var cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand ())
                 {
                     cmd.CommandText = "GetAllProducts";
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    var da = new SqlDataAdapter()
-                    {
+                    var da = new SqlDataAdapter () {
                         SelectCommand = cmd
                     };
 
-                    da.Fill(ds);
+                    da.Fill (ds);
                 };
             };
 
-            var table = ds.Tables.OfType<DataTable>().FirstOrDefault();
+            var table = ds.Tables.OfType<DataTable> ().FirstOrDefault ();
             if (table != null)
             {
-                foreach (var row in table.Rows.OfType<DataRow>())
+                foreach (var row in table.Rows.OfType<DataRow> ())
                 {
-                    var movie = new Product()
-                    {
+                    var movie = new Product () {
                         Id = (int)row[0],
                         Name = row["Name"] as string,
-                        Description = row.Field<string>("Description"),
-                        Price = row.Field<decimal>("Price"),
-                        IsDiscontinued = row.Field<bool>("IsDiscontinued"),
+                        Description = row.Field<string> ("Description"),
+                        Price = row.Field<decimal> ("Price"),
+                        IsDiscontinued = row.Field<bool> ("IsDiscontinued"),
                     };
 
                     yield return movie;
@@ -78,34 +76,34 @@ namespace Nile.Stores.Sql
             };
         }
 
-        protected override Product GetCore(int id)
+        protected override Product GetCore ( int id )
         {
-            using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand("GetProduct", conn))
+            using (var conn = CreateConnection ())
+            using (var cmd = new SqlCommand ("GetProduct", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue ("@id", id);
 
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
+                conn.Open ();
+                using (var reader = cmd.ExecuteReader ())
                 {
 
-                    if (reader.Read())
+                    if (reader.Read ())
                     {
-                        var isDiscontinuedIndex = reader.GetOrdinal("isDiscontinued");
+                        var isDiscontinuedIndex = reader.GetOrdinal ("IsDiscontinued");
+                        var priceIndex = reader.GetOrdinal ("Price");
+                        var descriptionIndex = reader.GetOrdinal ("Description");
 
-                        var product = new Product()
-                        {
+                        var movie = new Product () {
                             Id = (int)reader[0],
-                            Name = reader["Name"] as string,
+                            Name = reader["name"] as string,
 
-                           Description = !reader.IsDBNull(1) ? reader.GetString(1) : "",
-                             Price = (decimal)reader.GetValue (2),
-
-                            IsDiscontinued = reader.GetBoolean(isDiscontinuedIndex)
+                            Description = !reader.IsDBNull (descriptionIndex) ? reader.GetString (descriptionIndex) : "",
+                            Price = (decimal)reader.GetValue (priceIndex),
+                            IsDiscontinued = reader.GetBoolean (isDiscontinuedIndex)
                         };
 
-                        return product;
+                        return movie;
                     };
                 };
             };
@@ -113,47 +111,47 @@ namespace Nile.Stores.Sql
             return null;
         }
 
-        protected override void RemoveCore(int id)
+        protected override void RemoveCore ( int id )
         {
-            using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand("RemoveProduct", conn))
+            using (var conn = CreateConnection ())
+            using (var cmd = new SqlCommand ("RemoveProduct", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@id", SqlDbType.Int);
+                cmd.Parameters.Add ("@id", SqlDbType.Int);
                 cmd.Parameters[0].Value = id;
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                conn.Open ();
+                cmd.ExecuteNonQuery ();
             };
         }
 
-        protected override Product UpdateCore(Product existing,Product product)
+        protected override Product UpdateCore ( Product existing, Product product )
         {
-            using (var conn = CreateConnection())
-            using (var cmd = new SqlCommand("UpdateProduct", conn))
+            using (var conn = CreateConnection ())
+            using (var cmd = new SqlCommand ("UpdateProduct", conn))
             {
                 product.Id = existing.Id;
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                var parmName = new SqlParameter("@name", product.Name);
-                cmd.Parameters.Add(parmName);
-                cmd.Parameters.AddWithValue("@price", product.Price);
-                cmd.Parameters.AddWithValue("@description", product.Description);
-                cmd.Parameters.AddWithValue("@isDiscontinued", product.IsDiscontinued);
-                cmd.Parameters.AddWithValue("@id", product.Id);
+                var parmName = new SqlParameter ("@name", product.Name);
+                cmd.Parameters.Add (parmName);
+                cmd.Parameters.AddWithValue ("@price", product.Price);
+                cmd.Parameters.AddWithValue ("@description", product.Description);
+                cmd.Parameters.AddWithValue ("@isDiscontinued", product.IsDiscontinued);
+                cmd.Parameters.AddWithValue ("@id", product.Id);
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                conn.Open ();
+                cmd.ExecuteNonQuery ();
 
                 return product;
             };
         }
 
-        private SqlConnection CreateConnection()
+        private SqlConnection CreateConnection ()
         {
-            var conn = new SqlConnection(_connectionString);
+            var conn = new SqlConnection (_connectionString);
             return conn;
         }
 

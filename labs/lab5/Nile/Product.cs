@@ -48,7 +48,7 @@ namespace Nile
                 yield return new ValidationResult("Name is required");
 
             //Price >= 0
-            if (Price < 0)
+            if (Price <= 0)
                 yield return new ValidationResult("price must be >= 0");
         }
 

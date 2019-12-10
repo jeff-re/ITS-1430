@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Geoffrey Kio
+ * ITSE 1430
+ * 12/8/2019
+ */
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -17,14 +22,11 @@ namespace Nile.Web.Controllers
             var connString = ConfigurationManager.ConnectionStrings["ProductDatabase"];
             _database = new SqlProductDatabase (connString.ConnectionString);
         }
-        // GET: Nile
-        [HttpGet]
-        public ActionResult Index ()
+        public ActionResult Index()
         {
             var items = _database.GetAll ()
                                 .OrderBy (p => p.Name);
-
-
+                            
             var model = items.Select (i => i.ToModel ());
 
             return View (model);
@@ -54,11 +56,9 @@ namespace Nile.Web.Controllers
             {
                 _database.Remove (model.Id);
 
-                //PRG 
                 return RedirectToAction ("Index");
             } catch (Exception e)
             {
-                //Don't use Exception overload - doesn't work
                 ModelState.AddModelError ("", e.Message);
             };
 
@@ -88,12 +88,10 @@ namespace Nile.Web.Controllers
                     var Product = model.ToDomain ();
                     _database.Update (Product);
 
-                    //PRG 
                     return RedirectToAction ("Edit", new { id = Product.Id });
                 };
             } catch (Exception e)
             {
-                //Don't use Exception overload - doesn't work
                 ModelState.AddModelError ("", e.Message);
             };
 
@@ -112,7 +110,6 @@ namespace Nile.Web.Controllers
                     var product = model.ToDomain ();
                     _database.Add (product);
 
-                    //PRG 
                     return RedirectToAction ("Index");
                 };
             } catch (Exception e)
@@ -122,6 +119,7 @@ namespace Nile.Web.Controllers
 
             return View (model);
         }
+
         [HttpGet]
         public ActionResult Details ( int id )
         {
@@ -131,10 +129,7 @@ namespace Nile.Web.Controllers
 
             var model = product.ToModel ();
             return View (model);
-
         }
-
-
 
         private  IProductDatabase _database;
     }

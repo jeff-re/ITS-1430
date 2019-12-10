@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Geoffrey Kio
+ * ITSE 1430
+ * 12/8/2019
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,7 +25,6 @@ namespace Nile.Web.Models
                 Price = source.Price,
             };
         }
-
 
         public static ProductModel ToModel ( this Product source )
         {
