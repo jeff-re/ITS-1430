@@ -18,7 +18,8 @@ namespace Nile.Web.Controllers
             _database = new SqlProductDatabase (connString.ConnectionString);
         }
         // GET: Nile
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index ()
         {
             //var product = from p in _database.GetAll ()
             //              orderby p.Name
@@ -28,7 +29,7 @@ namespace Nile.Web.Controllers
             //return View();
             var items = _database.GetAll ()
                                 .OrderBy (p => p.Name);
-                            
+
 
             var model = items.Select (i => i.ToModel ());
 
@@ -91,7 +92,7 @@ namespace Nile.Web.Controllers
                 {
                     //Save if valid
                     var Product = model.ToDomain ();
-                    _database.Update ( Product);
+                    _database.Update (Product);
 
                     //PRG 
                     return RedirectToAction ("Edit", new { id = Product.Id });
@@ -128,6 +129,19 @@ namespace Nile.Web.Controllers
 
             return View (model);
         }
+        [HttpGet]
+        public ActionResult Details ( int id )
+        {
+            var movie = _database.Get (id);
+            if (movie == null)
+                return HttpNotFound ();
+
+            var model = movie.ToModel ();
+            return View (model);
+
+        }
+
+
 
         private  IProductDatabase _database;
     }

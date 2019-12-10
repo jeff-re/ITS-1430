@@ -99,8 +99,8 @@ namespace Nile.Stores.Sql
                             Id = (int)reader[0],
                             Name = reader["Name"] as string,
 
-                            Description = !reader.IsDBNull(2) ? reader.GetString(2) : "",
-                             Price = (decimal)reader.GetInt32 (5),
+                           Description = !reader.IsDBNull(1) ? reader.GetString(1) : "",
+                             Price = (decimal)reader.GetValue (2),
 
                             IsDiscontinued = reader.GetBoolean(isDiscontinuedIndex)
                         };

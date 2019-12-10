@@ -169,6 +169,7 @@
     <Content Include="Views\Nile\Delete.cshtml" />
     <Content Include="Views\Nile\Edit.cshtml" />
     <Content Include="Views\Nile\Index.cshtml" />
+    <Content Include="Views\Nile\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
