@@ -21,12 +21,6 @@ namespace Nile.Web.Controllers
         [HttpGet]
         public ActionResult Index ()
         {
-            //var product = from p in _database.GetAll ()
-            //              orderby p.Name
-            //              select p;
-
-            // _database.DataSource = product;
-            //return View();
             var items = _database.GetAll ()
                                 .OrderBy (p => p.Name);
 
@@ -74,11 +68,11 @@ namespace Nile.Web.Controllers
         [HttpGet]
         public ActionResult Edit ( int id )
         {
-            var movie = _database.Get (id);
-            if (movie == null)
+            var product = _database.Get (id);
+            if (product == null)
                 return HttpNotFound ();
 
-            var model = movie.ToModel ();
+            var model = product.ToModel ();
             return View (model);
         }
 
@@ -115,15 +109,14 @@ namespace Nile.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     //Save if valid
-                    var movie = model.ToDomain ();
-                    _database.Add (movie);
+                    var product = model.ToDomain ();
+                    _database.Add (product);
 
                     //PRG 
                     return RedirectToAction ("Index");
                 };
             } catch (Exception e)
             {
-                //Don't use Exception overload - doesn't work
                 ModelState.AddModelError ("", e.Message);
             };
 
@@ -132,11 +125,11 @@ namespace Nile.Web.Controllers
         [HttpGet]
         public ActionResult Details ( int id )
         {
-            var movie = _database.Get (id);
-            if (movie == null)
+            var product = _database.Get (id);
+            if (product == null)
                 return HttpNotFound ();
 
-            var model = movie.ToModel ();
+            var model = product.ToModel ();
             return View (model);
 
         }
